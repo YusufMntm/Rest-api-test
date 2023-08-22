@@ -1,11 +1,9 @@
 import sqlite3
 from flask import Flask, jsonify, request
-import mysql.connector
-from google.cloud import storage
 
 app = Flask(__name__)
 
-connection = mysql.connector.connect(user = 'root', password = '123456',)
+connection = sqlite3.connect('customer-information.db', check_same_thread=False)
 cursor = connection.cursor()
 
 
