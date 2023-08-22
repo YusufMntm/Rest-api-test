@@ -1,9 +1,11 @@
 import sqlite3
 from flask import Flask, jsonify, request
+import mysql.connector
+from google.cloud import storage
 
 app = Flask(__name__)
 
-connection = sqlite3.connect('customer-information.db', check_same_thread=False)
+connection = mysql.connector.connect(user = 'root', password = '123456',)
 cursor = connection.cursor()
 
 
@@ -31,12 +33,6 @@ def getUsers():
     users = cursor.fetchall()
     return jsonify(users)
 
-@app.route('/api/v1/users-kontakt', methods=['GET'])
-def getUsersKontakt():
-    cursor.execute("SELECT kontakt FROM customer_information")
-    users = cursor.fetchall()
-    return jsonify(users)
-
 @app.route('/api/v1/users-customerName', methods=['GET'])
 def getUsersCustomerName():
     cursor.execute("SELECT customerName FROM customer_information")
@@ -44,9 +40,33 @@ def getUsersCustomerName():
     return jsonify(users)
 
 
+@app.route('/api/v1/users-kontakt', methods=['GET'])
+def getUsersKontakt():
+    cursor.execute("SELECT kontakt FROM customer_information")
+    users = cursor.fetchall()
+    return jsonify(users)
+
 @app.route('/api/v1/users-telNumber', methods=['GET'])
 def getUsersTelNumber():
     cursor.execute("SELECT telNumber FROM customer_information")
+    users = cursor.fetchall()
+    return jsonify(users)
+
+@app.route('/api/v1/users-topic', methods=['GET'])
+def getUsersTopic():
+    cursor.execute("SELECT topic FROM customer_information")
+    users = cursor.fetchall()
+    return jsonify(users)
+
+@app.route('/api/v1/users-note', methods=['GET'])
+def getUsersNote():
+    cursor.execute("SELECT note FROM customer_information")
+    users = cursor.fetchall()
+    return jsonify(users)
+
+@app.route('/api/v1/users-file_path', methods=['GET'])
+def getUsersFilePath():
+    cursor.execute("SELECT file_path FROM customer_information")
     users = cursor.fetchall()
     return jsonify(users)
 
