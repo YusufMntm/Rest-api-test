@@ -1,12 +1,14 @@
-import sqlite3
+import pymysql
 from flask import Flask, jsonify, request
 
 app = Flask(__name__)
 
-connection = sqlite3.connect('customer-information.db', check_same_thread=False)
+connection = pymysql.connect(user='root',
+                            password='',
+                            host='35.226.33.67',
+                            database='customers')
+
 cursor = connection.cursor()
-
-
 @app.route('/api/v1/users-post', methods=['POST'])
 def createUser():
     data = request.json
@@ -16,8 +18,86 @@ def createUser():
     topic = data['topic']
     note = data['note']
     file_path = data['file_path']
-    sql = "INSERT INTO customer_information(customerName, kontakt, telNumber, topic, note, file_path) VALUES (?, ?, ?, ?, ?, ?)"
+    sql = "INSERT INTO customer_information(customerName, kontakt, telNumber, topic, note, file_path) VALUES (%s, %s, %s, %s, %s, %s)"
     val = (customerName, kontakt, telNumber, topic, note, file_path)
+    try:
+        cursor.execute(sql, val)
+        connection.commit()
+        return jsonify({'message': 'New user created!'}), 201
+    except:
+        return jsonify({'message': 'Failed to create user!'}), 500
+
+@app.route('/api/v1/users-customerName', methods=['POST'])
+def createUserCustomerName():
+    data = request.json
+    customerName = data['customerName']
+    sql = "INSERT INTO customer_information(customerName) VALUES (%s)"
+    val = (customerName)
+    try:
+        cursor.execute(sql, val)
+        connection.commit()
+        return jsonify({'message': 'New user created!'}), 201
+    except:
+        return jsonify({'message': 'Failed to create user!'}), 500
+
+@app.route('/api/v1/users-kontakt', methods=['POST'])
+def createUserKontakt():
+    data = request.json
+    kontakt = data['kontakt']
+    sql = "INSERT INTO customer_information(kontakt) VALUES (?)"
+    val = (kontakt)
+    try:
+        cursor.execute(sql, val)
+        connection.commit()
+        return jsonify({'message': 'New user created!'}), 201
+    except:
+        return jsonify({'message': 'Failed to create user!'}), 500
+
+@app.route('/api/v1/users-telNumber', methods=['POST'])
+def createUserTelNumber():
+    data = request.json
+    telNumber = data['telNumber']
+    sql = "INSERT INTO customer_information(telNumber) VALUES (?)"
+    val = (telNumber)
+    try:
+        cursor.execute(sql, val)
+        connection.commit()
+        return jsonify({'message': 'New user created!'}), 201
+    except:
+        return jsonify({'message': 'Failed to create user!'}), 500
+
+@app.route('/api/v1/users-topic', methods=['POST'])
+def createUserTopic():
+    data = request.json
+    topic = data['topic']
+    sql = "INSERT INTO customer_information(topic) VALUES (?)"
+    val = (topic)
+    try:
+        cursor.execute(sql, val)
+        connection.commit()
+        return jsonify({'message': 'New user created!'}), 201
+    except:
+        return jsonify({'message': 'Failed to create user!'}), 500
+
+@app.route('/api/v1/users-note', methods=['POST'])
+def createUserNote():
+    data = request.json
+    note = data['note']
+    sql = "INSERT INTO customer_information(note) VALUES (?)"
+    val = (note)
+    try:
+        cursor.execute(sql, val)
+        connection.commit()
+        return jsonify({'message': 'New user created!'}), 201
+    except:
+        return jsonify({'message': 'Failed to create user!'}), 500
+
+@app.route('/api/v1/users-file_path', methods=['POST'])
+def createUserFilePath():
+    data = request.json
+    file_path = data['file_path']
+    sql = "INSERT INTO customer_information(file_path) VALUES (?)"
+    val = (file_path)
     try:
         cursor.execute(sql, val)
         connection.commit()
@@ -75,4 +155,6 @@ def deleteUser(id):
     return jsonify({'message': 'User deleted!'}), 200
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, port=5000)
+
+
