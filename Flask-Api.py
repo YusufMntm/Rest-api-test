@@ -5,7 +5,7 @@ app = Flask(__name__)
 
 
 
-@app.route('/api/v1/users-customerName', methods=['GET'])
+@app.route('/', methods=['GET'])
 def getUserCustomerName():
     
     try:
